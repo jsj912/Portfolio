@@ -1,3 +1,4 @@
+import { About } from "@/components/sections/About";
 import { Hero } from "@/components/sections/Hero";
 import { Section } from "@/components/ui/Section";
 import { SECTIONS } from "@/lib/sections";
@@ -9,11 +10,13 @@ import { SECTIONS } from "@/lib/sections";
  * scroll anchors that Court Mode and the nav point at.
  */
 export default function Home() {
-  const rest = SECTIONS.filter((meta) => meta.id !== "home");
+  const built = new Set(["home", "about"]);
+  const rest = SECTIONS.filter((meta) => !built.has(meta.id));
 
   return (
     <>
       <Hero />
+      <About />
 
       {rest.map((meta) => (
         <Section key={meta.id} meta={meta} />

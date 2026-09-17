@@ -108,6 +108,56 @@
     animation: bird-cross 7s cubic-bezier(0.4, 0, 0.6, 1) 1 forwards;
   }
 
+  .ball-out {
+    animation: ball-out 2.2s cubic-bezier(0.45, 0, 0.55, 1) 1 forwards;
+  }
+
+  /* First-visit overlay. Sits above a fully rendered page and fades out; it
+     never gates rendering. */
+  .loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-bg);
+    opacity: 0;
+    transition-property: opacity;
+    transition-timing-function: ease;
+  }
+
+  .loading-overlay[data-state="visible"] {
+    display: flex;
+    opacity: 1;
+  }
+
+  .loading-overlay[data-state="leaving"] {
+    display: flex;
+    opacity: 0;
+  }
+
+  /* Easter egg: a three-second sunrise, then back to normal. */
+  .sunrise {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: none;
+    overflow: hidden;
+    pointer-events: none;
+    background-image: linear-gradient(
+      to top,
+      var(--color-accent) 0%,
+      var(--color-accent-soft) 32%,
+      transparent 72%
+    );
+  }
+
+  .sunrise[data-active="true"] {
+    display: block;
+    animation: sunrise 3s ease-in-out 1 forwards;
+  }
+
   /* Scroll reveal: fade + 16px rise, per the motion spec. Driven by CSS rather
      than JS so that prefers-reduced-motion is honoured before hydration and the
      content is never left invisible if JS fails. Only opacity and transform
@@ -157,6 +207,35 @@
   }
 }
 
+/* 404: one bounce, out of play, then it stays where it lands. */
+@keyframes ball-out {
+  0% {
+    transform: translate3d(-10vw, -10vh, 0) rotate(0deg);
+  }
+  45% {
+    transform: translate3d(35vw, 8vh, 0) rotate(220deg);
+  }
+  60% {
+    transform: translate3d(48vw, -2vh, 0) rotate(300deg);
+  }
+  100% {
+    transform: translate3d(115vw, 22vh, 0) rotate(560deg);
+  }
+}
+
+@keyframes sunrise {
+  0% {
+    opacity: 0;
+  }
+  18%,
+  72% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 @keyframes bird-cross {
   0% {
     transform: translate3d(-12vw, 0, 0);
@@ -197,9 +276,12 @@
   }
 
   /* Drifting particles, feathers and the bird are removed outright rather than
-     sped up, which would just park them at their end position. */
+     sped up, which would just park them at their end position. The overlay and
+     the easter egg are already gated in JS; this is the belt to that braces. */
   .atmosphere-motion,
-  .bird {
+  .bird,
+  .sunrise,
+  .loading-overlay {
     display: none !important;
   }
 }

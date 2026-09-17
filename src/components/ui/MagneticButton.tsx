@@ -17,6 +17,7 @@ type MagneticButtonProps = {
   href?: string;
   onClick?: () => void;
   ariaLabel?: string;
+  download?: boolean;
 };
 
 /**
@@ -34,6 +35,7 @@ export function MagneticButton({
   href,
   onClick,
   ariaLabel,
+  download,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotionSafe();
@@ -70,6 +72,7 @@ export function MagneticButton({
         ref={ref as React.Ref<HTMLAnchorElement>}
         href={href}
         aria-label={ariaLabel}
+        download={download}
         className={classes}
         style={style}
         onMouseMove={handleMove}

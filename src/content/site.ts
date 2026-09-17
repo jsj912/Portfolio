@@ -486,3 +486,43 @@ export const leadership: Leadership[] = [
     detail: "Led a 13-member cross-functional team for a national technical event; managed budgets and sponsorships, securing ~20% higher funding.",
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Prescribed UI copy.
+//
+// These strings are dictated verbatim by the build brief's section 5 and 6, not
+// invented here and not drawn from the CONTENT block. They live in this file so
+// that components still hard-code nothing.
+// ---------------------------------------------------------------------------
+
+export const copy = {
+  hero: {
+    subtitle: "Machine Learning Engineer · Applied AI · Research",
+    tagline:
+      "Building adaptive AI systems that learn, evolve, and perform under pressure.",
+    primaryCta: "View Match History",
+    resumeCta: "Download Resume",
+  },
+  about: {
+    pullQuote: "Every project begins as practice.",
+  },
+  contact: {
+    headline: "Let's build something worth remembering.",
+  },
+  loading: {
+    line: "Every rally starts with a serve.",
+  },
+  notFound: {
+    headline: "BALL OUT.",
+  },
+} as const;
+
+/**
+ * Two-sentence bio, assembled only from facts already in this file: the two
+ * education entries, and the Samsung and Fidelity roles. The four focus areas
+ * are the ones the brief names. Nothing here is new information.
+ */
+export const bio: string[] = [
+  "Computer science undergraduate at B.M.S. College of Engineering in Bengaluru, studying a concurrent B.S. in Data Science & Applications at IIT Madras.",
+  "Work spans computer vision, graph learning for fraud, trustworthy and calibrated ML, and serverless backend engineering — from a scene-routed Mixture-of-Experts detector at Samsung R&D Institute to migrating production batch jobs onto AWS Lambda at Fidelity Investments.",
+];

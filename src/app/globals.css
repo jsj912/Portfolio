@@ -89,6 +89,25 @@
     }
   }
 
+  /* Hero atmosphere. Slow, low opacity, nothing looping in the foreground.
+     All of it is decorative and pointer-events: none. */
+  .atmosphere-motion {
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  .particle {
+    animation-name: drift;
+  }
+
+  .feather {
+    animation-name: feather-fall;
+  }
+
+  .bird {
+    animation: bird-cross 7s cubic-bezier(0.4, 0, 0.6, 1) 1 forwards;
+  }
+
   /* Scroll reveal: fade + 16px rise, per the motion spec. Driven by CSS rather
      than JS so that prefers-reduced-motion is honoured before hydration and the
      content is never left invisible if JS fails. Only opacity and transform
@@ -105,6 +124,51 @@
   .reveal[data-shown="true"] {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate3d(14px, -120px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes feather-fall {
+  0% {
+    transform: translate3d(0, -10%, 0) rotate(-8deg);
+    opacity: 0;
+  }
+  20%,
+  80% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translate3d(38px, 115vh, 0) rotate(28deg);
+    opacity: 0;
+  }
+}
+
+@keyframes bird-cross {
+  0% {
+    transform: translate3d(-12vw, 0, 0);
+    opacity: 0;
+  }
+  12%,
+  88% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate3d(112vw, -60px, 0);
+    opacity: 0;
   }
 }
 
@@ -130,5 +194,12 @@
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+
+  /* Drifting particles, feathers and the bird are removed outright rather than
+     sped up, which would just park them at their end position. */
+  .atmosphere-motion,
+  .bird {
+    display: none !important;
   }
 }

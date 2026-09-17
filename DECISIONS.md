@@ -52,6 +52,7 @@ LOCALAPPDATA, or APPDATA. `winget` is available.
 **Decision.** Deferred to you — this is a genuine block, not a judgement call.
 Installing a language runtime is a system-level change, and a project-local Node
 means downloading a ~30 MB archive; both need your say-so rather than a default.
-See the question raised at the end of the phase-0 report.
 
-**Revisit** once the install route is chosen; record the outcome as D-003a.
+**Outcome (D-003a).** You chose to install Node yourself. Nothing was installed by
+this session — no `winget` call, no download, no change to PATH or to any system
+setting. Phase 1 resumes when `node --version` answers.

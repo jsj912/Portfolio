@@ -7,7 +7,8 @@ yet. Per the brief: no invented facts, no placeholder text — anything unknown 
 ## Blocking the build
 
 - [ ] **Node.js runtime** — not installed on this machine; the Next.js scaffold
-      cannot run until it is. See `DECISIONS.md` D-003.
+      cannot run until it is. You are installing it yourself (`DECISIONS.md`
+      D-003a). Build resumes at Phase 1 once `node --version` answers.
 
 ## Missing from the brief
 

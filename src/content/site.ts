@@ -392,7 +392,7 @@ export const publications: Publication[] = [
 export const awards: Award[] = [
   {
     title: "1st Place (Solo), CySeck Grand CTF Challenge 2026",
-    detail: "Ranked",
+    detail: "Ranked #1 out of 350+ participants in a national capture-the-flag competition; ₹50,000 prize.",
   },
   {
     title: "Finalist, Smart Horizon International Hackathon 2026",

@@ -1,0 +1,5 @@
+Static assets are served from this folder at the site root.
+
+Add your resume here as exactly `resume.pdf`. The build checks for that path:
+when the file is present the "Download Resume" button appears in the hero and
+the nav; when it is absent, both are hidden rather than linking to a 404.

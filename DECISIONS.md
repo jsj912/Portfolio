@@ -306,3 +306,69 @@ too, under `#match-exp-<org>`.
 Keyboard operation, the expanded/collapsed state exposed to screen readers, and
 in-page find all come for free, and it works before hydration. The only styling
 needed was removing the default marker.
+
+---
+
+## D-017 — A real transcription bug, and why the first check missed it
+
+**What broke.** The first trophy card rendered its detail as the single word
+"Ranked". The brief says:
+
+    detail: Ranked #1 out of 350+ participants in a national capture-the-flag
+            competition; INR 50,000 prize.
+
+YAML treats an unquoted ` #` as the start of a comment, so the parser cut the
+value at "Ranked" and silently discarded the rest. The brief's YAML is
+technically malformed on that line; the `"#1 / 350+"` stat two sections later is
+quoted and was never affected.
+
+**Why the Phase 2 check passed it.** That check compiled `site.ts` and compared
+it field-by-field against the YAML *parsed from the brief*. Both sides went
+through the same lossy parse, so both said "Ranked" and agreed. The check was
+verifying transcription fidelity relative to my own parse, not relative to what
+the brief actually says. It was a real check, but it was measuring the wrong
+thing.
+
+**Fixed.** The value was repaired from the raw brief line rather than from the
+parse. Verification now runs against the raw characters of the brief, and tests
+two separate things:
+
+  1. every transcribed string appears verbatim in the brief;
+  2. no string is a truncated prefix — that is, the brief's line does not carry
+     on past where the value stops.
+
+The second test is the one that matters here, because "Ranked" *is* a substring
+of the brief; only the continuation check catches it. It is narrowed to the
+shape this failure takes (a `key: value` line, no flow collection, real text
+left over), so inline lists like `tech: [A, B, C]` are not false positives.
+
+Confirmed both ways: the repaired content passes all 209 transcribed strings,
+and reintroducing the truncation makes it fail and name the field.
+
+**Worth knowing.** Anywhere else the brief's YAML has an unquoted `#`, the same
+truncation would occur. Only this one line and two structural comments contain
+`#` at all, so this was the only instance.
+
+---
+
+## D-018 — What `check:content` scans, and what it deliberately does not
+
+**Decision.** The checker scans `src/`, `public/`, and the rendered output
+(`index.html`, `_not-found.html`, `index.rsc`). It does **not** scan bundled
+vendor chunks: a match for "lorem" inside a dependency is not this site's
+content and would only produce noise that trains people to ignore the check.
+
+Two refinements were needed after the first run, both narrowing false positives
+rather than weakening the rule:
+
+- `http://www.w3.org/2000/svg` is allowlisted. It is an XML namespace
+  identifier, never fetched, but it is still a literal `http://` in source.
+- References to the *filename* `TODO.md` are masked before searching for stray
+  `TODO` markers, so a comment pointing readers at the file does not fail the
+  build.
+
+**Verified by negative test**, not by assumption: each of the eight violation
+classes (phone number, `lorem`, `example.com`, `your-`, `Coming soon`, stray
+`TODO`, a protected word, and an unlisted URL) was injected into a throwaway
+file under `src/` in turn, and the checker failed on every one. It then passed
+again on the clean tree.

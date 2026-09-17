@@ -227,3 +227,40 @@ under the 3.0 that WCAG 1.4.11 asks of non-text UI boundaries. That is deliberat
 these borders are decorative separators on cards and panels, never the only way to
 identify a control. Every interactive element is identified by its text label, and
 the focus indicator is the orange ring at 6.89:1.
+
+---
+
+## D-012 — No GitHub icon: lucide-react 1.x dropped brand glyphs
+
+**Context.** The brief specifies `lucide-react` for icons, and the match cards
+need a repository link. The installed version exports 6299 icons and none of them
+is a GitHub mark:
+
+    error TS2305: Module '"lucide-react"' has no exported member 'Github'.
+
+Brand icons were removed from lucide; there is no `Github`, `Linkedin` or similar
+in 1.46.0.
+
+**Decision.** Per ground rule 4, used the current equivalent rather than pinning
+an older version or vendoring a mark: the repository link uses the neutral `Code`
+glyph and keeps its visible "GitHub" text label, so nothing is lost in meaning.
+Contact rows are labelled in text for the same reason. Reproducing the real
+GitHub or LinkedIn logos was not an option either way — they are trademarks, and
+ground rule 3 rules out dropping in third-party artwork.
+
+---
+
+## D-013 — Which recap is open lives in the URL, not in React state
+
+**Context.** The brief asks for recaps to be deep-linkable via `#match-<slug>`,
+and separately for the usual dialog behaviours.
+
+**Decision.** The hash *is* the state. `MatchGrid` reads it through
+`useSyncExternalStore` over a small store in `src/lib/matchDialog.ts`. Opening
+writes `#match-<slug>`, closing writes back `#projects`.
+
+This makes deep-linking fall out for free rather than needing a separate
+mount-time effect to reconcile URL against state — and it sidesteps the
+`set-state-in-effect` rule that reconciliation would have tripped. `replaceState`
+rather than `pushState`, so opening six recaps does not leave six entries in the
+back button.

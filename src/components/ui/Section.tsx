@@ -36,7 +36,7 @@ export function Section({ meta, children, className, bare = false }: SectionProp
       aria-labelledby={headingId}
       className={cn("scroll-mt-24 py-24 sm:py-32", className)}
     >
-      <div className="mx-auto w-full max-w-content px-6">
+      <div className="shell">
         <Reveal as="header" className="mb-12 sm:mb-16">
           <p className="tabular mb-3 text-sm text-accent">
             <span className="sr-only">Rotation </span>

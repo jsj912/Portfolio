@@ -80,7 +80,7 @@ export function NavClient({ hasResume, resumePath, name }: NavProps) {
     >
       <nav
         aria-label="Primary"
-        className="mx-auto flex h-20 max-w-content items-center justify-between px-6 pl-10 lg:pl-6"
+        className="shell flex h-20 items-center justify-between"
       >
         <a
           href="#home"

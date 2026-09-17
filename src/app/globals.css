@@ -71,6 +71,24 @@
 }
 
 @layer components {
+  /* Page gutter. The extra left padding keeps content clear of the Court Mode
+     rail on mobile; from 1024px the rail moves to the right, so the padding
+     swaps sides with it. */
+  .shell {
+    margin-inline: auto;
+    width: 100%;
+    max-width: var(--container-content);
+    padding-inline: 1.5rem;
+    padding-left: 2.75rem;
+  }
+
+  @media (min-width: 1024px) {
+    .shell {
+      padding-left: 1.5rem;
+      padding-right: 4rem;
+    }
+  }
+
   /* Scroll reveal: fade + 16px rise, per the motion spec. Driven by CSS rather
      than JS so that prefers-reduced-motion is honoured before hydration and the
      content is never left invisible if JS fails. Only opacity and transform

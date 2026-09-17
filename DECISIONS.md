@@ -152,3 +152,78 @@ the brief's motion and Court Mode specs need are exported by it — `motion`,
 `useMotionValueEvent`, `useInView`, `useAnimate`. **No fallback to `framer-motion` is
 needed.** Tailwind v4 ships CSS-first, so the design tokens in Phase 3 go in an
 `@theme` block in `globals.css`, not in a JS config file.
+
+---
+
+## D-009 — Scroll reveals are CSS-driven, not `motion`-driven
+
+**Context.** The brief picks `motion` as the animation library and asks for a
+`Reveal` component plus strict `prefers-reduced-motion` support. The obvious
+implementation — `motion.div` with `initial={{ opacity: 0, y: 16 }}` and
+`whileInView` — has two problems here:
+
+1. Reduced motion has to be decided in JS. `useReducedMotion` from motion
+   snapshots the setting on first render, which is `false` during SSR, so a
+   visitor with the setting on renders one set of inline styles on the server
+   and another on the client — a hydration mismatch, which would also show up as
+   a console error in the Phase 7 smoke test.
+2. The server HTML would carry `opacity: 0`. If JS fails or is slow, the page is
+   blank text on a dark background.
+
+**Decision.** `Reveal` sets a `data-shown` attribute from an `IntersectionObserver`
+and the transition itself lives in CSS (`.reveal` in `globals.css`). A
+`@media (prefers-reduced-motion: reduce)` block forces reveals fully visible and
+untransitioned, so the setting is honoured on the first paint with no JS involved
+and no chance of a mismatch. Only `opacity` and `transform` animate, which is what
+the performance budget requires anyway.
+
+`motion` is still the animation library for everything it is genuinely better at:
+the scroll-linked Court Mode ball, magnetic buttons, card hover springs, recap
+overlay transitions, milestone arcs and the easter egg.
+
+---
+
+## D-010 — Media queries and scroll via `useSyncExternalStore`
+
+**Context.** The scaffold's ESLint config includes the React Compiler rules, and
+`react-hooks/set-state-in-effect` rejected the usual
+`useState` + `useEffect` + `addEventListener` pattern:
+
+    error  Calling setState synchronously within an effect can trigger
+           cascading renders   react-hooks/set-state-in-effect
+
+**Decision.** Rewrote the subscriptions with `useSyncExternalStore`
+(`useMediaQuery`, `useScrolled`) rather than silencing the rule. It is the API
+built for external stores, and it takes an explicit server snapshot, which turns
+the SSR value into a stated choice instead of an accident:
+`(prefers-reduced-motion: reduce)` reports `true` on the server, so motion stays
+off until the client positively says otherwise. `Reveal` went further and writes
+its flag straight to the DOM, since nothing in React needs to know.
+
+---
+
+## D-011 — Contrast verified numerically; the border is decorative
+
+**Context.** The brief warns specifically about orange on dark for small text.
+
+**Measured** (WCAG 2.1 relative luminance), every pair the UI actually uses:
+
+| Pair | Ratio | AA (4.5) |
+| --- | --- | --- |
+| text on bg | 18.53 | pass |
+| text on surface | 17.19 | pass |
+| muted on bg | 7.75 | pass |
+| muted on surface | 7.19 | pass |
+| accent on bg | 6.89 | pass |
+| accent on surface | 6.40 | pass |
+| accent-soft on bg | 8.51 | pass |
+| bg on accent (primary button) | 6.89 | pass |
+
+Lowest is 6.40:1, comfortably over AA for normal text. Orange is still reserved
+for active state, key numbers and the primary CTA, as instructed.
+
+**One thing to be aware of.** `border` (#262626) against `bg` (#0B0B0B) is 1.30:1,
+under the 3.0 that WCAG 1.4.11 asks of non-text UI boundaries. That is deliberate:
+these borders are decorative separators on cards and panels, never the only way to
+identify a control. Every interactive element is identified by its text label, and
+the focus indicator is the orange ring at 6.89:1.

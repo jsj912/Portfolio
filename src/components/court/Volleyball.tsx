@@ -5,10 +5,15 @@ type VolleyballProps = {
 };
 
 /**
- * A ball, drawn from scratch: one circle plus three seam curves.
+ * A volleyball, drawn from scratch: one circle plus three seams.
  *
- * Deliberately generic geometry — no logo, no branding, nothing referencing any
- * existing design.
+ * The seams are rim-to-rim arcs bowing around a curved central panel, repeated
+ * at 120°. That arrangement is what distinguishes a volleyball from a
+ * basketball, whose seams instead radiate from two poles and cross the middle.
+ * The whole set is tipped 20° so the ball reads as in play rather than as a
+ * static diagram.
+ *
+ * Deliberately generic geometry — no logo, no branding, nothing traced.
  */
 export function Volleyball({ className, size = 16 }: VolleyballProps) {
   return (
@@ -22,14 +27,15 @@ export function Volleyball({ className, size = 16 }: VolleyballProps) {
     >
       <circle cx="12" cy="12" r="10.5" fill="currentColor" />
       <g
+        transform="rotate(20 12 12)"
         fill="none"
         stroke="var(--color-bg)"
-        strokeWidth="1.4"
+        strokeWidth="1.6"
         strokeLinecap="round"
       >
-        <path d="M12 1.5 C 7 7, 6 15, 9 22.2" />
-        <path d="M22.3 9 C 15.5 8.2, 8.6 11.8, 4.2 18.6" />
-        <path d="M2.2 8.2 C 8.4 11, 13.4 17, 14.6 22.2" />
+        <path d="M3.85 18.62 Q12 11.38 20.15 18.62" />
+        <path d="M3.85 18.62 Q12 11.38 20.15 18.62" transform="rotate(120 12 12)" />
+        <path d="M3.85 18.62 Q12 11.38 20.15 18.62" transform="rotate(240 12 12)" />
       </g>
     </svg>
   );

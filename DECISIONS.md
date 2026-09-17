@@ -264,3 +264,45 @@ mount-time effect to reconcile URL against state — and it sidesteps the
 `set-state-in-effect` rule that reconciliation would have tripped. `replaceState`
 rather than `pushState`, so opening six recaps does not leave six entries in the
 back button.
+
+---
+
+## D-014 — Bracket runs newest at the top
+
+**Context.** The brief asks for the bracket oldest-at-the-bottom advancing
+upward, and allows top-down instead "if that reads better on mobile; decide and
+log it".
+
+**Decision.** Kept the brief's primary ordering. In document order that is:
+B.E. (expected June 2027), then Fidelity (June 2026 – August 2026), then Samsung
+(Jan 2026 – June 2026) — so the bracket advances upward on desktop *and* the
+single mobile column reads most-recent-first, which is how a resume is read. The
+two requirements did not conflict, so no trade-off was needed.
+
+The rung at the top is the B.E. entry straight from the content layer. No
+graduate-school step was invented, and no date appears that is not in the
+content.
+
+---
+
+## D-015 — One recap dialog, shared by projects and roles
+
+**Context.** The brief wants Match Recap overlays on match cards and also on the
+Fidelity and Samsung experience entries.
+
+**Decision.** Generalised the dialog's prop to a `RecapSubject`
+(`slug`, `title`, `period`, `recap`, `bullets`) instead of writing a second
+component. `Match` already satisfies it structurally; experience entries are
+mapped onto it. Both use the same hash store, so role recaps are deep-linkable
+too, under `#match-exp-<org>`.
+
+---
+
+## D-016 — Role bullets expand with native `<details>`
+
+**Context.** "Each role expands to its bullets."
+
+**Decision.** Used `<details>`/`<summary>` rather than a state-driven toggle.
+Keyboard operation, the expanded/collapsed state exposed to screen readers, and
+in-page find all come for free, and it works before hydration. The only styling
+needed was removing the default marker.

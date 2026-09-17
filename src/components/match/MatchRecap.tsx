@@ -5,12 +5,26 @@ import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef } from "react";
 
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
-import type { Match } from "@/content/site";
+import type { Recap } from "@/content/site";
 
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+/**
+ * Anything that can be shown as a recap.
+ *
+ * `Match` satisfies this as-is; experience entries are mapped onto it, so
+ * projects and roles share one dialog rather than two near-identical ones.
+ */
+export type RecapSubject = {
+  slug: string;
+  title: string;
+  period: string | null;
+  recap: Recap;
+  bullets: string[];
+};
+
 type MatchRecapProps = {
-  match: Match | null;
+  match: RecapSubject | null;
   onClose: () => void;
 };
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Barlow_Condensed, Inter, JetBrains_Mono } from "next/font/google";
 
 import { CourtMode } from "@/components/court/CourtMode";
+import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
 import { profile } from "@/content/site";
 
@@ -51,6 +52,8 @@ export default function RootLayout({
         <CourtMode />
 
         <main id="main">{children}</main>
+
+        <Footer />
       </body>
     </html>
   );

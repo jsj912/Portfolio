@@ -526,3 +526,15 @@ export const bio: string[] = [
   "Computer science undergraduate at B.M.S. College of Engineering in Bengaluru, studying a concurrent B.S. in Data Science & Applications at IIT Madras.",
   "Work spans computer vision, graph learning for fraud, trustworthy and calibrated ML, and serverless backend engineering — from a scene-routed Mixture-of-Experts detector at Samsung R&D Institute to migrating production batch jobs onto AWS Lambda at Fidelity Investments.",
 ];
+
+/**
+ * Current research directions, named by the brief and each already evidenced by
+ * work in this file: RingShield (temporal graph learning for fraud rings), the
+ * Samsung Mixture-of-Experts detector (on-device vision), and AMSDDS
+ * (calibrated, uncertainty-aware ML). No new claims.
+ */
+export const currentDirection: string[] = [
+  "Temporal graph learning for fraud rings",
+  "On-device vision",
+  "Calibrated and uncertainty-aware ML",
+];
